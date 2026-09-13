@@ -1,28 +1,38 @@
-# ESP8266 Water Turbidity Sensor
+// =====================================================
+// WATER TURBIDITY SENSOR
+// ESP8266 NodeMCU ESP-12E
+// =====================================================
 
-A simple water turbidity monitoring project using:
+#define TURBIDITY_PIN A0
 
-- ESP8266 NodeMCU ESP-12E
-- Turbidity Sensor Module
+// Water quality threshold
+// 450 or above = CLEAN
+// Below 450 = DIRTY
+#define TURBIDITY_THRESHOLD 450
 
-## Wiring
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
 
-| Turbidity Sensor | ESP8266 |
-|---|---|
-| VCC | 3.3V |
-| GND | GND |
-| AO | A0 |
+  Serial.println("===== WATER TURBIDITY TEST =====");
+}
 
-## Water Quality Logic
+void loop() {
 
-- A0 >= 450 → CLEAN
-- A0 < 450 → DIRTY
+  // Read analog value from turbidity sensor
+  int sensorValue = analogRead(TURBIDITY_PIN);
 
-## Serial Monitor
+  Serial.print("A0 Value: ");
+  Serial.println(sensorValue);
 
-Baud Rate: 115200
+  // Check water quality
+  if (sensorValue < TURBIDITY_THRESHOLD) {
+    Serial.println("Water Status: DIRTY");
+  } else {
+    Serial.println("Water Status: CLEAN");
+  }
 
-## Note
+  Serial.println("----------------------");
 
-The threshold 450 is an initial calibration value based on testing.
-For different sensors and water conditions, calibration may be required.
+  delay(1000);
+}
